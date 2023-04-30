@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  app:
+    build: ./app
+    container_name: smsystem
+    restart: always
+    volumes:
+      - ./app:/app
+    ports:
+      - "8050:5000"
+    networks:
+      - app
+    # depends_on:
+    # - mongodb1
+    # - mongodb2
+    # - rabbitmq1
+    # - rabbitmq2
+  collector:
+    build: ./collector
+    container_name: smsystem-collector
+    volumes:
+      - ./collector:/collector
+    ports:
+      - "8051:5000"
+    networks:
+      - app
+    # depends_on:
+    # - mongodb1
+    # - mongodb2
+    # - rabbitmq1
+    # - rabbitmq2
+
+  # mongodb1:
+
+  # mongodb2:
+
+  # rabbitmq1:
+
+  # rabbitmq2:
+
+networks:
+  app:
+    driver: bridge
