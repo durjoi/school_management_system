@@ -1,4 +1,4 @@
-from flask import jsonify, request, session, redirect, render_template
+from flask import jsonify, request, session, redirect, render_template, flash
 import uuid
 from settings import db
 from rabbitmq import publish
@@ -33,12 +33,14 @@ class Subject:
         existing_subject = db.subjects.find_one({"name": subject['name']})
 
         if existing_subject:
-            return jsonify({"error": "Subject already exists"}), 401
+            flash('Subject name already exist!', 'success')
+            return redirect('/subject/create')
 
         db.subjects.insert_one(subject)
 
         publish({"type": "subject", "action": "create", "data": subject})
 
+        flash('New subject added successfully!', 'success')
         return redirect('/subjects')
 
     def edit_form(self, id):
@@ -55,12 +57,13 @@ class Subject:
             {"name": subject['name'], "_id": {"$ne": id}})
 
         if existing_subject:
-            return jsonify({"error": "Subject already exists"}), 401
+            flash('Subject already exists', 'danger')
+            return redirect(f'/subject/{id}/edit')
 
         db.subjects.update_one({"_id": id}, {"$set": subject})
 
         subject['_id'] = id
 
         publish({"type": "subject", "action": "update", "data": subject})
-
+        flash('Subject updated successfully!', 'success')
         return redirect('/subjects')
