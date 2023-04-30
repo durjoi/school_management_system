@@ -14,8 +14,17 @@ def index():
 
 @class_bp.route('/class/create', methods=['GET', 'POST'])
 @auth
-def create_user():
+def create():
     if request.method == 'POST':
-        return Class().create_class()
+        return Class().create()
     else:
-        return Class().create_class_form()
+        return Class().create_form()
+
+
+@class_bp.route('/class/<class_id>/edit', methods=['GET', 'POST'])
+@auth
+def edit(class_id):
+    if request.method == 'POST':
+        return Class().edit(class_id)
+    else:
+        return Class().edit_form(class_id)

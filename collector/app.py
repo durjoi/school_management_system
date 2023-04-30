@@ -36,12 +36,18 @@ def callback(ch, method, properties, body):
     elif (data['type'] == "subject"):
         if (data['action'] == "create"):
             db.subjects.insert_one(data['data'])
-        if (data['action'] == "update"):
+        elif (data['action'] == "update"):
             db.subjects.update_one({"_id": data['data']['_id']}, {
                                    "$set": data['data']})
     elif (data['type'] == "class"):
         if (data['action'] == "create"):
             db.classes.insert_one(data['data'])
+        elif (data['action'] == "update"):
+            db.classes.update_one({"_id": data['data']['_id']}, {
+                                  "$set": data['data']})
+            # delete from marks table where class id is the current class id and subject id is not in the subjects list
+            db.marks.delete_many(
+                {"class_._id": id, "subject._id": {"$nin": data['subjects']}})
     elif (data['type'] == "student"):
         if (data['action'] == "create"):
             db.students.insert_one(data['data'])
