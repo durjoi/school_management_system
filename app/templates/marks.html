@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mt-3">
+        <h4>Student Marks table</h4>
+        <p>Student: {{ student.name }}</p>
+        <p>Registration No: {{ student.registration }}</p>
+        <p>Class: {{ student.class.name }}</p>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Marks</th>
+                    <th>Grade</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for mark in marks %}
+                    <tr>
+                        <td>{{ mark.subject_name }}</td>
+                        <td><!-- marks update form  -->
+                            <form action="/marks/{{ mark._id }}/edit" method="POST">
+                                <input type="number" name="marks" value="{{ mark.marks }}">
+                                <input type="submit" value="Update">
+                            </form></td>
+                        <td>{{ mark.grade }}</td>
+                        <td>
+                            <form action="/marks/{{ mark._id }}/delete" style="display: inline-block" method="POST">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn btn-link">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -203,3 +203,63 @@ class Marks:
         }
 
         return jsonify(response)
+
+    def get_student_marks(self, student_id):
+        student = db.students.find_one({"_id": student_id})
+        if student:
+            pipeline = [
+                {"$match": {"student_id": student_id}},
+                {"$lookup": {
+                    "from": "subjects",
+                    "localField": "subject_id",
+                    "foreignField": "_id",
+                    "as": "subject"
+                }},
+                {"$unwind": "$subject"},
+                {"$project": {
+                    "_id": 1,
+                    "subject_id": 1,
+                    "subject_name": "$subject.name",
+                    "marks": 1,
+                    "grade": 1
+                }}
+            ]
+            marks = list(db.marks.aggregate(pipeline))
+            return render_template('marks.html', student=student, marks=marks)
+        flash("Student not found", "danger")
+        return redirect('/students')
+
+    def delete(self, id):
+        mark = db.marks.find_one({"_id": id})
+        db.marks.delete_one({"_id": id})
+        flash("Mark deleted successfully", "success")
+        publish({"type": "marks", "action": "delete", "data": id})
+        return redirect(f'/student/{mark["student_id"]}/marks')
+
+    def edit(self, id):
+        mark = db.marks.find_one({"_id": id})
+        item = {
+            "marks": request.form.get('marks'),
+        }
+
+        # convert marks to int and grade
+        marks = int(item['marks'])
+        if marks >= 80:
+            item['grade'] = "A+"
+        elif marks >= 70:
+            item['grade'] = "A"
+        elif marks >= 60:
+            item['grade'] = "B"
+        elif marks >= 30:
+            item['grade'] = "C"
+        else:
+            item['grade'] = "F"
+
+        db.marks.update_one({"_id": id}, {"$set": item})
+
+        item['_id'] = id
+
+        publish({"type": "marks", "action": "update", "data": item})
+
+        flash("Mark updated successfully!", "success")
+        return redirect(f'/student/{mark["student_id"]}/marks')

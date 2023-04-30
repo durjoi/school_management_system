@@ -88,6 +88,11 @@ def callback(ch, method, properties, body):
     elif (data['type'] == "marks"):
         if (data['action'] == "create"):
             db.marks.insert_one(data['data'])
+        elif (data['action'] == "update"):
+            db.marks.update_one({"_id": data['data']['_id']}, {
+                                "$set": data['data']})
+        elif (data['action'] == "delete"):
+            db.marks.delete_one({"_id": data['data']})
 
     db.message.insert_one({"message": data})
 

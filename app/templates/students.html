@@ -22,6 +22,8 @@
                             <td>{{ student.registration }}</td>
                             <td>{{ student.class.name }}</td>
                             <td>
+                                <!-- View student marks  -->
+                                <a href="/student/{{ student._id }}/marks">View Marks</a>
                                 <a href="{{ student._id }}/marks/create">Add Marks</a>
                                 <a href="/student/{{ student._id }}/edit">Edit</a>
                                 <form action="/student/{{ student._id }}/delete" style="display: inline-block" method="POST">
