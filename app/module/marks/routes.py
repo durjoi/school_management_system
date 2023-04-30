@@ -7,11 +7,6 @@ from module.marks.models import Marks
 marks_bp = Blueprint('marks_bp', __name__)
 
 
-@marks_bp.route('/classes', methods=['GET'])
-def index():
-    return Marks().index()
-
-
 @marks_bp.route('<student_id>/marks/create', methods=['GET', 'POST'])
 @auth
 def create_user(student_id):
