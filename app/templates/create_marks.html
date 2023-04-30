@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Create Marks</h1>
+    <form action="/{{ student._id }}/marks/create" method="POST">
+        <p>Student Name: {{ student.name }}</p>
+        <p>Registration No: {{ student.registration }}</p>
+        <p>Class Name: {{ classes.name }}</p>
+        <p>Subjects: 
+            <select name="subject">
+                {% for subject in subjects %}
+                    <option value="{{ subject._id }}">{{ subject.name }}</option>
+                {% endfor %}
+            </select>
+        </p><br>
+        <p>Marks: <input type="number" name="marks"></p>
+        <p><input type="submit" value="Create"></p>
+    </form>
+    
+    
+
+{% endblock %}

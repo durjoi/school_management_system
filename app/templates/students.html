@@ -20,6 +20,7 @@
                     <td>{{ student.registration }}</td>
                     <td>{{ student.class.name }}</td>
                     <td>
+                        <a href="{{ student._id }}/marks/create">Add Marks</a>
                         <a href="/student/{{ student.id }}">View</a>
                         <a href="/student/{{ student.id }}/edit">Edit</a>
                         <a href="/student/{{ student.id }}/delete">Delete</a>
