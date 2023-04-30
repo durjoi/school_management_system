@@ -75,7 +75,7 @@ This is a simple web application developed with Flask, which provides basic CRUD
    docker-compose up
    ```
 
-   _NB: Wait some time when containers are creating. Some error will be visible in first time but it will resolve automatically after some moment_
+   _Note: Please wait for some time while the containers are being created. During the initial setup, some errors may appear, but they will be automatically resolved after a few moments._
 
 6. Run seeder to populate dummy data
    ```
