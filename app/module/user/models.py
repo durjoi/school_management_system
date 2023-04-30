@@ -132,3 +132,13 @@ class User:
         session.clear()
         flash('Logged out successfully!', 'info')
         return redirect('/')
+
+    def delete(self, teacher_id):
+        db.users.delete_one({"_id": teacher_id})
+        # Update class where this teacher is assigned
+        db.classes.update_many({"teacher_id": teacher_id}, {
+                               "$set": {"teacher_id": None}})
+
+        publish({"type": "user", "action": "delete", "data": teacher_id})
+        flash('Teacher deleted successfully!', 'success')
+        return redirect('/teachers')

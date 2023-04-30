@@ -33,6 +33,11 @@ def callback(ch, method, properties, body):
         elif (data['action'] == "update"):
             db.users.update_one({"_id": data['data']['_id']}, {
                                 "$set": data['data']})
+        elif (data['action'] == "delete"):
+            db.users.delete_one({"_id": data['data']})
+            # Update class where this teacher is assigned
+            db.classes.update_many({"teacher._id": data['data']}, {
+                                   "$set": {"teacher": None}})
     elif (data['type'] == "subject"):
         if (data['action'] == "create"):
             db.subjects.insert_one(data['data'])

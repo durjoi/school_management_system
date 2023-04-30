@@ -21,6 +21,11 @@
                             <td>{{ teacher.email }}</td>
                             <td>
                                 <a href="/teacher/{{ teacher._id }}/edit">Edit</a>
+                                <!-- Create delete form -->
+                                <form action="/teacher/{{ teacher._id }}/delete" style="display: inline-block" method="POST">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn btn-link">Delete</button>
+                                </form>
                                 <!-- <a href="/teacher/{{ teacher._id }}/delete">Delete</a> -->
                             </td>
                         </tr>

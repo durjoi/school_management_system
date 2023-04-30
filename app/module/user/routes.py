@@ -43,3 +43,9 @@ def edit_user(teacher_id):
         return User().edit(teacher_id)
     else:
         return User().edit_form(teacher_id)
+
+
+@user_bp.route('/teacher/<teacher_id>/delete', methods=['POST'])
+@auth
+def delete_user(teacher_id):
+    return User().delete(teacher_id)
