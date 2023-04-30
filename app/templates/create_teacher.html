@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Create Teacher</h1>
+    <form action="/teacher/create" method="POST">
+        <p>Name: <input type="text" name="name"></p>
+        <p>Email: <input type="text" name="email"></p><br>
+        <p>Password: <input type="password" name="password"></p><br>
+        <p><input type="submit" value="Create"></p>
+    </form>
+    
+    
+
+{% endblock %}

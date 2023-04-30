@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Management System</title>
+
+  <!-- <link rel="stylesheet" href="/static/css/normalize.css">
+  <link rel="stylesheet" href="/static/css/styles.css"> -->
+
+</head>
+<body>
+    <nav>
+        <a href="/">Dashboard</a>
+        
+
+        {% if session.logged_in %}
+            <p>Welcome, {{ session.user.email }}!</p>
+            <a href="/logout">Logout</a>
+        {% else %}
+        <a href="/login">Login</a>
+        {% endif %}
+        
+       {% if session.logged_in and session.user.type == 'admin' %}
+       <a href="/teachers">View Teachers</a>
+       <a href="/teacher/create">Create Teacher</a>
+       {% endif %}
+        
+        
+    </nav>
+
+  {% block content %}
+    {# Template inserted here #}
+  {% endblock %}
+  
+  <!-- <script src="/static/js/jquery.js"></script>
+  <script src="/static/js/scripts.js"></script> -->
+  
+</body>
+</html>
