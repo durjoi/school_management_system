@@ -59,7 +59,8 @@ class Marks:
                     {"student_id": item['student_id'], "subject_id": item['subject_id']})
 
                 if (existing_marks):
-                    return jsonify({"error": "Marks already exists"}), 400
+                    flash('Marks already exist in this subject', 'warning')
+                    return redirect(f'/{student_id}/marks/create')
 
                 # create marks
                 db.marks.insert_one(item)
@@ -69,9 +70,9 @@ class Marks:
                 return redirect('/students')
 
             flash('Class not found!', 'danger')
-            return redirect(f'student_id/marks/create')
+            return redirect(f'/{student_id}/marks/create')
         flash('Student not found!', 'danger')
-        return redirect(f'student_id/marks/create')
+        return redirect(f'/{student_id}/marks/create')
 
     '''
         Create Class Form

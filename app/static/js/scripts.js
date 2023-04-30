@@ -95,7 +95,7 @@ function generateReport(classId, subjectId) {
             
             const grades = [];
             const percentages = [];
-            const colors = ['green', 'blue', 'yellow', 'orange', 'red'];
+            const colors = ['#B4C7E7', '#7EAED3', '#4A90E2', '#0074D9', '#034078'];
 
             // Extract data from response
             const report = data.report;
