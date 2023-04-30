@@ -1,4 +1,4 @@
-from flask import jsonify, request, session, redirect, render_template
+from flask import jsonify, request, session, redirect, render_template, flash
 import uuid
 from settings import db
 from passlib.hash import pbkdf2_sha256
@@ -48,12 +48,14 @@ class User:
         existing_user = db.users.find_one({"email": user['email']})
 
         if existing_user:
-            return jsonify({"error": "Email address already in use"}), 401
+            flash('Email address already in use', 'danger')
+            return redirect('/teacher/create')
 
         db.users.insert_one(user)
 
         publish({"type": "user", "action": "create", "data": user})
 
+        flash('New teacher added successfully!', 'success')
         return redirect('/teachers')
 
     def edit_form(self, teacher_id):
@@ -77,13 +79,14 @@ class User:
             {"email": user['email'], "_id": {"$ne": teacher_id}})
 
         if existing_user:
-            return jsonify({"error": "Email address already in use"}), 401
+            flash('Email address already in use', 'danger')
+            return redirect(f'/teacher/{teacher_id}/edit')
 
         db.users.update_one({"_id": teacher_id}, {"$set": user})
 
         user['_id'] = teacher_id
         publish({"type": "user", "action": "update", "data": user})
-
+        flash('Teacher updated successfully!', 'success')
         return redirect('/teachers')
 
     '''
@@ -93,7 +96,8 @@ class User:
     def login(self):
 
         if (session.get('logged_in')):
-            return jsonify({"error": "Already Logged in"}), 401
+            flash('Already Logged in', 'info')
+            return redirect('/')
 
         user = {
             "email": request.form.get('email'),
@@ -110,12 +114,14 @@ class User:
             if pbkdf2_sha256.verify(request.form.get('password'), user['password']):
                 # save to session
                 self.start_session(user)
-
+                flash('Logged in successfully!', 'success')
                 return redirect('/')
             else:
-                return jsonify({"error": "Invalid username/password"}), 401
+                flash('Invalid username/password', 'danger')
+                return redirect('/login')
         else:
-            return jsonify({"error": "Invalid username/password"}), 401
+            flash('Invalid username/password', 'danger')
+            return redirect('/login')
 
     '''
         function for logout
@@ -124,4 +130,5 @@ class User:
 
     def logout(self):
         session.clear()
+        flash('Logged out successfully!', 'info')
         return redirect('/')

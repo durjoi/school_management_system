@@ -1,4 +1,4 @@
-from flask import jsonify, request, session, redirect, render_template
+from flask import jsonify, request, session, redirect, render_template, flash
 import uuid
 from settings import db
 from rabbitmq import publish
@@ -65,7 +65,7 @@ class Marks:
                 db.marks.insert_one(item)
 
                 publish({"type": "marks", "action": "create", "data": item})
-
+                flash('Marks added successfully!', 'success')
                 return redirect('/students')
             return jsonify({"error": "Class not found"}), 400
         return jsonify({"error": "Student not found"}), 400
