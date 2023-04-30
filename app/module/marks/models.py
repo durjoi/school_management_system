@@ -32,13 +32,13 @@ class Marks:
         # convert marks to int and grade
         marks = int(item['marks'])
         if marks >= 80:
+            item['grade'] = "A+"
+        elif marks >= 70:
             item['grade'] = "A"
         elif marks >= 60:
             item['grade'] = "B"
-        elif marks >= 40:
+        elif marks >= 30:
             item['grade'] = "C"
-        elif marks >= 20:
-            item['grade'] = "D"
         else:
             item['grade'] = "F"
 
@@ -119,7 +119,7 @@ class Marks:
                 {'class_id': class_id, 'subject_id': subject_id, 'grade': {'$ne': 'F'}})
 
             # Get the grade-wise count of students who passed the subject
-            grades = ['A', 'B', 'C', 'D', 'F']
+            grades = ['A+', 'A', 'B', 'C', 'F']
             grade_counts = {}
             for grade in grades:
                 grade_counts[grade] = db.marks.count_documents(
@@ -127,12 +127,15 @@ class Marks:
 
             # Calculate the percentage of students who passed the subject
             pass_percentage = (passed_students / total_students) * 100
-
+            # convert pass percentage to 2 decimal places
+            pass_percentage = "{:.2f}".format(pass_percentage)
             # Create the report
             report = []
             for grade in grades:
+                # convert grade percentage to 2 decimal places
 
                 grade_percentage = (grade_counts[grade] / total_students) * 100
+                grade_percentage = "{:.2f}".format(grade_percentage)
                 report.append({
                     'grade': grade,
                     'students': grade_counts[grade],
@@ -187,7 +190,7 @@ class Marks:
 
         response = {
             "report_type": "class",
-            "total_student": total_student,
+            "total_students": total_student,
             "report": result,
             'subjects': subjects,
             'classes': classes,

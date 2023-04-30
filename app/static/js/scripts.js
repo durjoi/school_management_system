@@ -11,6 +11,7 @@ function generateReport(classId, subjectId) {
     }
 
     document.getElementById('reportTable').innerHTML = '';
+    document.getElementById('totalStudents').innerText = '';
 
     fetch(url)
 .then(response => response.json())
@@ -19,6 +20,9 @@ function generateReport(classId, subjectId) {
             const subjects = data.subjects;
             
             const classes = data.classes;
+
+            // Show total students
+            document.getElementById('totalStudents').innerText = "Total Students: " + data.total_students;
 
             // Populate the class dropdown
             const classDropdown = document.getElementById('class-dropdown');
