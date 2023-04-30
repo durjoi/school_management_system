@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Create Class</h1>
+    <form action="/student/create" method="POST">
+        <p>Name: <input type="text" name="name"></p><br>
+        <p>Registration No: <input type="text" name="registration"></p><br>
+        <p>Class: 
+            <select name="class">
+                {% for class in classes %}
+                    <option value="{{ class._id }}">{{ class.name }}</option>
+                {% endfor %}
+            </select>
+        <p><input type="submit" value="Create"></p>
+    </form>
+    
+    
+
+{% endblock %}

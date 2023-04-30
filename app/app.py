@@ -3,6 +3,7 @@ from rabbitmq import create_queue
 from module.user.routes import user_bp
 from module.subject.routes import subject_bp
 from module.classes.routes import class_bp
+from module.student.routes import student_bp
 
 app = Flask(__name__)
 app.secret_key = 'secret_key'
@@ -14,6 +15,7 @@ create_queue()
 app.register_blueprint(user_bp, url_prefix='/')
 app.register_blueprint(subject_bp, url_prefix='/')
 app.register_blueprint(class_bp, url_prefix='/')
+app.register_blueprint(student_bp, url_prefix='/')
 
 
 @app.route('/')

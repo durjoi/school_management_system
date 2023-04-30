@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Classes</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Registration No</th>
+                <th>Class</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for student in students %}
+                <tr>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.registration }}</td>
+                    <td>{{ student.class.name }}</td>
+                    <td>
+                        <a href="/student/{{ student.id }}">View</a>
+                        <a href="/student/{{ student.id }}/edit">Edit</a>
+                        <a href="/student/{{ student.id }}/delete">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -19,7 +19,7 @@ class Subject:
         return render_template('subjects.html', subjects=subjects)
 
     '''
-        Create a new user as teacher
+        Create a new subject
     '''
 
     def create_subject(self):
@@ -28,7 +28,7 @@ class Subject:
             "name": request.form.get('name')
         }
 
-        # check if user exists in db
+        # check if subject exists in db
 
         existing_subject = db.subjects.find_one({"name": subject['name']})
 
