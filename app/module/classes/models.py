@@ -1,4 +1,4 @@
-from flask import jsonify, request, session, redirect, render_template
+from flask import jsonify, request, session, redirect, render_template, flash
 import uuid
 from settings import db
 from rabbitmq import publish
@@ -51,12 +51,13 @@ class Class:
         existing_subject = db.subjects.find_one({"name": item['name']})
 
         if existing_subject:
-            return jsonify({"error": "Class already exists"}), 401
+            flash('Class name already exists!', 'danger')
+            return redirect('/classe/create')
 
         db.classes.insert_one(item)
 
         publish({"type": "class", "action": "create", "data": item})
-
+        flash('New class added successfully!', 'success')
         return redirect('/classes')
 
     def edit_form(self, id):
@@ -93,7 +94,8 @@ class Class:
             {"name": item['name'], "_id": {"$ne": id}})
 
         if existing_subject:
-            return jsonify({"error": "Class already exists"}), 401
+            flash('Class name already exists', 'danger')
+            return redirect(f'/class/{id}/edit')
 
         db.classes.update_one({"_id": id}, {"$set": item})
 
@@ -107,7 +109,7 @@ class Class:
 
         item['_id'] = id
         publish({"type": "class", "action": "update", "data": item})
-
+        flash('Class updated successfully!', 'success')
         return redirect('/classes')
 
     '''

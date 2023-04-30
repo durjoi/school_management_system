@@ -1,4 +1,4 @@
-from flask import jsonify, request, session, redirect, render_template
+from flask import jsonify, request, session, redirect, render_template, flash
 import uuid
 from settings import db
 from rabbitmq import publish
@@ -38,18 +38,19 @@ class Student:
                 "name": class_['name']
             }
 
-        # check if user exists in db
+        # check if student exists in db
 
         existing_student = db.students.find_one(
             {"registration": item['registration']})
 
         if existing_student:
-            return jsonify({"error": "Student already exists"}), 400
+            flash('Registration no already exists', 'danger')
+            return redirect('/student/create')
 
         db.students.insert_one(item)
 
         publish({"type": "student", "action": "create", "data": item})
-
+        flash('New student added successfully', 'success')
         return redirect('/students')
 
     def edit_form(self, id):
@@ -83,7 +84,8 @@ class Student:
             {"registration": item['registration'], "_id": {"$ne": id}})
 
         if existing_student:
-            return jsonify({"error": "Student already exists"}), 400
+            flash('Student registration no already exists', 'danger')
+            return redirect(f'/student/{id}/edit')
 
         db.students.update_one({"_id": id}, {"$set": item})
 
@@ -95,7 +97,7 @@ class Student:
         item['_id'] = id
 
         publish({"type": "student", "action": "update", "data": item})
-
+        flash('Student updated successfully', 'success')
         return redirect('/students')
     '''
         Create Class Form

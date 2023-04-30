@@ -67,8 +67,11 @@ class Marks:
                 publish({"type": "marks", "action": "create", "data": item})
                 flash('Marks added successfully!', 'success')
                 return redirect('/students')
-            return jsonify({"error": "Class not found"}), 400
-        return jsonify({"error": "Student not found"}), 400
+
+            flash('Class not found!', 'danger')
+            return redirect(f'student_id/marks/create')
+        flash('Student not found!', 'danger')
+        return redirect(f'student_id/marks/create')
 
     '''
         Create Class Form
