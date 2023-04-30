@@ -81,6 +81,10 @@ def callback(ch, method, properties, body):
                     {"student._id": data['data']['_id']})
             db.students.update_one({"_id": data['data']['_id']}, {
                                    "$set": data['data']})
+        elif (data['action'] == "delete"):
+            db.students.delete_one({"_id": data['data']})
+            # delete from marks table where student id is the current student id
+            db.marks.delete_many({"student_id": data['data']})
     elif (data['type'] == "marks"):
         if (data['action'] == "create"):
             db.marks.insert_one(data['data'])

@@ -28,3 +28,9 @@ def edit_user(student_id):
         return Student().edit(student_id)
     else:
         return Student().edit_form(student_id)
+
+
+@student_bp.route('/student/<student_id>/delete', methods=['POST'])
+@auth
+def delete_user(student_id):
+    return Student().delete(student_id)

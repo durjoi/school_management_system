@@ -24,6 +24,10 @@
                             <td>
                                 <a href="{{ student._id }}/marks/create">Add Marks</a>
                                 <a href="/student/{{ student._id }}/edit">Edit</a>
+                                <form action="/student/{{ student._id }}/delete" style="display: inline-block" method="POST">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn btn-link">Delete</button>
+                                </form>
                             </td>
                         </tr>
                     {% endfor %}

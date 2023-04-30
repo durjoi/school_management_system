@@ -107,3 +107,12 @@ class Student:
         classes = db.classes.find({})
         classes = [item for item in classes]
         return render_template('create_student.html', classes=classes)
+
+    def delete(self, id):
+        db.students.delete_one({"_id": id})
+        # delete marks table where student id is the current student id
+        db.marks.delete_many({"student_id": id})
+
+        publish({"type": "student", "action": "delete", "data": id})
+        flash('Student deleted successfully', 'success')
+        return redirect('/students')
