@@ -82,7 +82,7 @@ function generateReport(classId, subjectId) {
                     studentsAppeared.innerText = item.students;
                     
                     const passPercentage = document.createElement('td');
-                    passPercentage.innerText = item.percentage;
+                    passPercentage.innerText = item.percentage + '%';
                     row.appendChild(grade);
                     row.appendChild(studentsAppeared);
                     row.appendChild(passPercentage);
@@ -151,7 +151,7 @@ function generateReport(classId, subjectId) {
                     const subjectName = document.createElement('td');
                     subjectName.innerText = item.subject_name;
                     const passPercentage = document.createElement('td');
-                    passPercentage.innerText = item.pass_percentage;
+                    passPercentage.innerText = item.pass_percentage + '%';
                     const studentsAppeared = document.createElement('td');
                     studentsAppeared.innerText = item.total_count;
 

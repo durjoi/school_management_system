@@ -1,27 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Create Class</h1>
-    <form action="/class/create" method="POST">
-        <p>Name: <input type="text" name="name"></p>
-        <p>Teacher: 
-            <select name="teacher">
-                {% for teacher in teachers %}
-                    <option value="{{ teacher._id }}">{{ teacher.name }}</option>
-                {% endfor %}
-            </select>
+<div class="row">
+    <div class="col-12 mt-3">
+        <h4>Create Class</h4>
+        <form action="/class/create" method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="name" name="name">
+            </div>
         
-        </p><br>
-        <p>Subjects: 
-            <select name="subjects" multiple>
-                {% for subject in subjects %}
-                    <option value="{{ subject._id }}">{{ subject.name }}</option>
-                {% endfor %}
-            </select>
-        </p><br>
-        <p><input type="submit" value="Create"></p>
-    </form>
-    
-    
+            <div class="mb-3">
+                <label for="teacher" class="form-label">Teacher:</label>
+                <select class="form-select" id="teacher" name="teacher">
+                    {% for teacher in teachers %}
+                        <option value="{{ teacher._id }}">{{ teacher.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        
+            <div class="mb-3">
+                <label for="subjects" class="form-label">Subjects:</label>
+                <select class="form-select" id="subjects" name="subjects" multiple>
+                    {% for subject in subjects %}
+                        <option value="{{ subject._id }}">{{ subject.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    </div>
+</div>
 
 {% endblock %}

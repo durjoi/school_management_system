@@ -32,7 +32,7 @@ class User:
         Create a new user as teacher
     '''
 
-    def create_teacher(self):
+    def create(self):
         user = {
             "_id": uuid.uuid4().hex,
             "name": request.form.get('name'),
@@ -53,6 +53,36 @@ class User:
         db.users.insert_one(user)
 
         publish({"type": "user", "action": "create", "data": user})
+
+        return redirect('/teachers')
+
+    def edit_form(self, teacher_id):
+        teacher = db.users.find_one({"_id": teacher_id})
+        return render_template('edit_teacher.html', teacher=teacher)
+
+    def edit(self, teacher_id):
+        user = {
+            "name": request.form.get('name'),
+            "email": request.form.get('email'),
+            # "password": request.form.get('password'),
+        }
+
+        if (request.form.get('password')):
+            user['password'] = pbkdf2_sha256.encrypt(
+                request.form.get('password'))
+
+        # check if user exists in db without the current user
+
+        existing_user = db.users.find_one(
+            {"email": user['email'], "_id": {"$ne": teacher_id}})
+
+        if existing_user:
+            return jsonify({"error": "Email address already in use"}), 401
+
+        db.users.update_one({"_id": teacher_id}, {"$set": user})
+
+        user['_id'] = teacher_id
+        publish({"type": "user", "action": "update", "data": user})
 
         return redirect('/teachers')
 

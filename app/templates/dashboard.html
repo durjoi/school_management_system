@@ -1,20 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Dashboard</h1>
-    <p>Welcome to the dashboard</p>
+<div class="row">
+    <div class="col mt-3">
+        <!-- <label for="class-dropdown" class="form-label">Class</label> -->
+        <select id="class-dropdown" class="form-select"></select>
+      </div>
+      <div class="col mt-3">
+        <!-- <label for="subject-dropdown" class="form-label">Subject</label> -->
+        <select id="subject-dropdown" class="form-select"></select>
+      </div>
+</div>
+    <div class="row mt-5">
+        <div class="col-6">
+            <table class="table table-bordered" id="reportTable">
 
-    Class
-    <select id="class-dropdown">
-      </select>
-      
-    Subject
-      <select id="subject-dropdown">
-      </select>
-
-      <table id="reportTable">
-
-      </table>
-    <canvas id="myChart" style="height: 200px; width: 400px;"></canvas>
+            </table>
+        </div>
+        <div class="col-6">
+            <canvas id="myChart" style="height: 200px; width: 400px;"></canvas>
+        </div>
+    </div>
 
 {% endblock %}

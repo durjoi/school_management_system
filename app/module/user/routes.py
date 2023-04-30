@@ -31,6 +31,15 @@ def logout():
 @auth
 def create_user():
     if request.method == 'POST':
-        return User().create_teacher()
+        return User().create()
     else:
         return render_template('create_teacher.html')
+
+
+@user_bp.route('/teacher/<teacher_id>/edit', methods=['GET', 'POST'])
+@auth
+def edit_user(teacher_id):
+    if request.method == 'POST':
+        return User().edit(teacher_id)
+    else:
+        return User().edit_form(teacher_id)

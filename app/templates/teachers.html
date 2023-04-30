@@ -1,29 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Teachers</h2>
+<div class="row">
+    <div class="col-md-12" style="padding: 10px">
+        <h4>Teachers</h2>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            {% for teacher in teachers %}
-                <tr>
-                    <td>{{ teacher.name }}</td>
-                    <td>{{ teacher.email }}</td>
-                    <!-- <td>
-                        <a href="/teacher/{{ teacher.id }}">View</a>
-                        <a href="/teacher/{{ teacher.id }}/edit">Edit</a>
-                        <a href="/teacher/{{ teacher.id }}/delete">Delete</a>
-                    </td> -->
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+        
+                <tbody>
+                    {% for teacher in teachers %}
+                        <tr>
+                            <td>{{ teacher.name }}</td>
+                            <td>{{ teacher.email }}</td>
+                            <td>
+                                <a href="/teacher/{{ teacher._id }}/edit">Edit</a>
+                                <a href="/teacher/{{ teacher._id }}/delete">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endblock %}
+    </div>
+</div>
+    

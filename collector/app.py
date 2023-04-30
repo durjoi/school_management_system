@@ -30,6 +30,9 @@ def callback(ch, method, properties, body):
     if (data['type'] == "user"):
         if (data['action'] == "create"):
             db.users.insert_one(data['data'])
+        elif (data['action'] == "update"):
+            db.users.update_one({"_id": data['data']['_id']}, {
+                                "$set": data['data']})
     elif (data['type'] == "subject"):
         if (data['action'] == "create"):
             db.subjects.insert_one(data['data'])

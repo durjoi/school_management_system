@@ -1,22 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Create Marks</h1>
-    <form action="/{{ student._id }}/marks/create" method="POST">
-        <p>Student Name: {{ student.name }}</p>
-        <p>Registration No: {{ student.registration }}</p>
-        <p>Class Name: {{ classes.name }}</p>
-        <p>Subjects: 
-            <select name="subject">
-                {% for subject in subjects %}
+<div class="row">
+    <div class="col-12 mt-3">
+        <h4>Create Marks</h4>
+        <form action="/{{ student._id }}/marks/create" method="POST">
+            <div class="mb-3">
+                <label for="student-name" class="form-label">Student Name:</label>
+                <!-- <p id="student-name">{{ student.name }}</p> -->
+                <input value="{{ student.name }}" class="form-control" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="registration-no" class="form-label">Registration No:</label>
+                <input value="{{ student.registration }}" class="form-control" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="class-name" class="form-label">Class Name:</label>
+                <input value="{{ classes.name }}" class="form-control" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="subject" class="form-label">Subject:</label>
+                <select name="subject" id="subject" class="form-select">
+                    {% for subject in subjects %}
                     <option value="{{ subject._id }}">{{ subject.name }}</option>
-                {% endfor %}
-            </select>
-        </p><br>
-        <p>Marks: <input type="number" name="marks"></p>
-        <p><input type="submit" value="Create"></p>
-    </form>
-    
-    
-
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="marks" class="form-label">Marks:</label>
+                <input type="number" name="marks" id="marks" class="form-control">
+            </div>
+            <div class="mb-3">
+                <input type="submit" value="Create" class="btn btn-primary">
+            </div>
+        </form>
+        
+    </div>
+</div>
 {% endblock %}

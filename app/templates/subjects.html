@@ -1,23 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Subjects</h2>
+    <div class="row">
+        <div class="col-12 mt-3">
+            <h4>Subjects</h4>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
 
-        <tbody>
-            {% for subject in subjects %}
-                <tr>
-                    <td>{{ subject.name }}</td>
-                    
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                <tbody>
+                    {% for subject in subjects %}
+                        <tr>
+                            <td>{{ subject.name }}</td>
+                            <td>
+                                <a href="/teacher/{{ subject._id }}">View</a>
+                                <a href="/teacher/{{ subject._id }}/edit">Edit</a>
+                                <a href="/teacher/{{ subject._id }}/delete">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
 {% endblock %}
