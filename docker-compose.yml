@@ -20,7 +20,7 @@ services:
     build: ./collector
     container_name: smsystem-collector
     volumes:
-      - ./collector:/collector
+      - ./collector:/app
     ports:
       - "8051:5000"
     restart: always
