@@ -99,7 +99,11 @@ class Class:
 
         # delete from marks table where class id is the current class id and subject id is not in the subjects list
         db.marks.delete_many(
-            {"class_._id": id, "subject._id": {"$nin": item['subjects']}})
+            {"class_id": id, "subject_id": {"$nin": item['subjects']}})
+
+        # if class name updated then update it on students table
+        db.students.update_many({"class._id": id}, {
+                                "$set": {"class.name": item['name']}})
 
         item['_id'] = id
         publish({"type": "class", "action": "update", "data": item})

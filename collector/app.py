@@ -47,7 +47,10 @@ def callback(ch, method, properties, body):
                                   "$set": data['data']})
             # delete from marks table where class id is the current class id and subject id is not in the subjects list
             db.marks.delete_many(
-                {"class_._id": id, "subject._id": {"$nin": data['subjects']}})
+                {"class_id": data['data']['_id'], "subject_id": {"$nin": data['data']['subjects']}})
+            # update class name on students table
+            db.students.update_many({"class._id": data['data']['_id']}, {
+                "$set": {"class.name": data['data']['name']}})
     elif (data['type'] == "student"):
         if (data['action'] == "create"):
             db.students.insert_one(data['data'])

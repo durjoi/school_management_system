@@ -155,7 +155,9 @@ function generateReport(classId, subjectId) {
                     const subjectName = document.createElement('td');
                     subjectName.innerText = item.subject_name;
                     const passPercentage = document.createElement('td');
-                    passPercentage.innerText = item.pass_percentage + '%';
+                    // convert item.pass_percentage in 2 decimal places
+                    passPercentage.innerText = item.pass_percentage.toFixed(2) + '%';
+                    // passPercentage.innerText =  + '%';
                     const studentsAppeared = document.createElement('td');
                     studentsAppeared.innerText = item.total_count;
 

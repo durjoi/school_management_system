@@ -161,22 +161,24 @@ class Marks:
             class_id = class_['_id']
 
         pipeline = [
-            {"$match": {"class_id": class_id, "marks": {"$ne": "F"}}},
+            {"$match": {"class_id": class_id}},
             {"$group": {"_id": {"class_id": "$class_id", "subject_id": "$subject_id"},
-                        "pass_count": {"$sum": 1}, "total_count": {"$sum": 1}}},
+                        "pass_count": {"$sum": {"$cond": [{"$ne": ["$grade", "F"]}, 100, 0]}},
+                        "total_count": {"$sum": 1},
+                        "fail_count": {"$sum": {"$cond": [{"$eq": ["$grade", "F"]}, 100, 0]}}}},
             {"$lookup": {"from": "subjects", "localField": "_id.subject_id",
                          "foreignField": "_id", "as": "subject"}},
             {"$project": {"_id": 0, "subject_name": {"$arrayElemAt": [
-                "$subject.name", 0]}, "pass_count": 1, "total_count": 1}},
+                "$subject.name", 0]}, "pass_count": 1, "fail_count": 1, "total_count": 1}},
             {"$group": {"_id": "$_id.class_id", "subjects": {"$push": {"subject_name": "$subject_name",
-                                                                       "pass_count": "$pass_count", "total_count": "$total_count"}}, "total_students": {"$sum": "$total_count"}}},
+                                                                       "pass_count": "$pass_count", "fail_count": "$fail_count", "total_count": "$total_count"}}, "total_students": {"$sum": "$total_count"}}},
             {"$unwind": "$subjects"},
-            {"$project": {"_id": 0, "subject_name": "$subjects.subject_name", "pass_count": "$subjects.pass_count", "total_count": "$subjects.total_count",
+            {"$project": {"_id": 0, "subject_name": "$subjects.subject_name", "pass_count": "$subjects.pass_count", "fail_count": "$subjects.fail_count", "total_count": "$subjects.total_count",
                           "pass_percentage": {"$multiply": [{"$divide": ["$subjects.pass_count", "$subjects.total_count"]}, 100]}}},
             {"$group": {"_id": "$subject_name", "total_count": {"$first": "$total_count"}, "pass_count": {
-                "$sum": "$pass_count"}, "pass_percentage": {"$avg": "$pass_percentage"}}},
+                "$sum": "$pass_count"}, "fail_count": {"$sum": "$fail_count"}, "pass_percentage": {"$avg": {"$cond": [{"$gte": [{"$divide": ["$pass_count", "$total_count"]}, 0.4]}, {"$divide": ["$pass_count", "$total_count"]}, 0]}}}},
             {"$project": {"_id": 0, "subject_name": "$_id",
-                          "total_count": 1, "pass_count": 1, "pass_percentage": 1}}
+                          "total_count": 1, "pass_count": 1, "pass_percentage": 1, "fail_count": 1, "total_students": {"$sum": "$total_count"}}}
         ]
         result = list(db.marks.aggregate(pipeline))
 
