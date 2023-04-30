@@ -1,6 +1,10 @@
 from flask import Flask
+from rabbitmq import create_queue
 
 app = Flask(__name__)
+
+# Creating queue in rabbitmq server
+create_queue()
 
 
 @app.route('/')
