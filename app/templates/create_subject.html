@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Create Subject</h1>
+    <form action="/subject/create" method="POST">
+        <p>Name: <input type="text" name="name"></p>
+        <p><input type="submit" value="Create"></p>
+    </form>
+    
+    
+
+{% endblock %}

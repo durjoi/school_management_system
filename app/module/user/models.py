@@ -54,7 +54,7 @@ class User:
 
         publish({"type": "user", "action": "create", "data": user})
 
-        return redirect('/')
+        return redirect('/teachers')
 
     '''
         Login function for user
