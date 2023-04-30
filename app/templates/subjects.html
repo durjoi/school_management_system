@@ -21,6 +21,10 @@
                                 <!-- <a href="/teacher/{{ subject._id }}">View</a> -->
                                 <a href="/subject/{{ subject._id }}/edit">Edit</a>
                                 <!-- <a href="/teacher/{{ subject._id }}/delete">Delete</a> -->
+                                <form action="/subject/{{ subject._id }}/delete" style="display: inline-block" method="POST">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn btn-link">Delete</button>
+                                </form>
                             </td>
                         </tr>
                     {% endfor %}

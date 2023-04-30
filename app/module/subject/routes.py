@@ -28,3 +28,9 @@ def edit(subject_id):
         return Subject().edit(subject_id)
     else:
         return Subject().edit_form(subject_id)
+
+
+@subject_bp.route('/subject/<subject_id>/delete', methods=['POST'])
+@auth
+def delete(subject_id):
+    return Subject().delete(subject_id)

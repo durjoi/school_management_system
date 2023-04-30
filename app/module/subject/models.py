@@ -67,3 +67,17 @@ class Subject:
         publish({"type": "subject", "action": "update", "data": subject})
         flash('Subject updated successfully!', 'success')
         return redirect('/subjects')
+
+    def delete(self, id):
+        db.subjects.delete_one({"_id": id})
+
+        # delete this subject from classes
+        db.classes.update_many(
+            {"subjects": {"$in": [id]}}, {"$pull": {"subjects": id}})
+
+        # delete this subject from marks
+        db.marks.delete_many({"subject_id": id})
+
+        publish({"type": "subject", "action": "delete", "data": id})
+        flash('Subject deleted successfully!', 'success')
+        return redirect('/subjects')

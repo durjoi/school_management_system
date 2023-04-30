@@ -44,6 +44,13 @@ def callback(ch, method, properties, body):
         elif (data['action'] == "update"):
             db.subjects.update_one({"_id": data['data']['_id']}, {
                                    "$set": data['data']})
+        elif (data['action'] == "delete"):
+            db.subjects.delete_one({"_id": data['data']})
+            # delete from marks table where subject id is the current subject id
+            db.marks.delete_many({"subject_id": data['data']})
+            # delete subject from class table
+            db.classes.update_many({"subjects": data['data']}, {
+                                   "$pull": {"subjects": data['data']}})
     elif (data['type'] == "class"):
         if (data['action'] == "create"):
             db.classes.insert_one(data['data'])
