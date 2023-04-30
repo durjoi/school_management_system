@@ -30,7 +30,7 @@ class Subject:
 
         # check if user exists in db
 
-        existing_subject = db.subjects.find_one({"email": subject['name']})
+        existing_subject = db.subjects.find_one({"name": subject['name']})
 
         if existing_subject:
             return jsonify({"error": "Subject already exists"}), 401

@@ -33,6 +33,9 @@ def callback(ch, method, properties, body):
     elif (data['type'] == "subject"):
         if (data['action'] == "create"):
             db.subjects.insert_one(data['data'])
+    elif (data['type'] == "class"):
+        if (data['action'] == "create"):
+            db.classes.insert_one(data['data'])
 
     db.message.insert_one({"message": data})
 
