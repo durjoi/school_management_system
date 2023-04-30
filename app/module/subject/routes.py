@@ -14,8 +14,17 @@ def index():
 
 @subject_bp.route('/subject/create', methods=['GET', 'POST'])
 @auth
-def create_user():
+def create():
     if request.method == 'POST':
-        return Subject().create_subject()
+        return Subject().create()
     else:
         return render_template('create_subject.html')
+
+
+@subject_bp.route('/subject/<subject_id>/edit', methods=['GET', 'POST'])
+@auth
+def edit(subject_id):
+    if request.method == 'POST':
+        return Subject().edit(subject_id)
+    else:
+        return Subject().edit_form(subject_id)
