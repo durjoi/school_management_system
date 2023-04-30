@@ -24,7 +24,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-          {% if session.logged_in  %}
+          {% if session.logged_in and session.user.type == 'admin'  %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Teachers
@@ -34,7 +34,9 @@
               <li><a class="dropdown-item" href="/teacher/create">Create Teacher</a></li>
             </ul>
           </li>
+          {% endif %}
 
+          {% if session.logged_in  %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Subjects
@@ -64,12 +66,9 @@
               <li><a class="dropdown-item" href="/student/create">Create Student</a></li>
             </ul>
           </li>
-
-          
-
-          
-            
           {% endif %}
+               
+          
 
           {% if session.logged_in %}
           

@@ -10,7 +10,7 @@ from rabbitmq import publish
 class Class:
 
     '''
-        return subject list
+        return class list
     '''
 
     def index(self):
@@ -19,7 +19,7 @@ class Class:
         return render_template('classes.html', classes=classes)
 
     '''
-        Create a new user as teacher
+        Create a new class
     '''
 
     def create(self):

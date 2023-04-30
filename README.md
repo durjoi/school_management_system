@@ -97,3 +97,9 @@ The application will be accessible at [http://localhost:8050](http://localhost:8
 Credentials for both rabbitmq are 
 - username: guest  
 - password: guest
+
+## Permissions & Access
+
+- Teacher can add/update/delete Student, Class, Marks
+- Admin can add/update/delete Student, Class, Marks
+- Everyone can see the dashboard

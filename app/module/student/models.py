@@ -99,8 +99,9 @@ class Student:
         publish({"type": "student", "action": "update", "data": item})
         flash('Student updated successfully', 'success')
         return redirect('/students')
+
     '''
-        Create Class Form
+        Create student Form
     '''
 
     def create_form(self):
