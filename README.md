@@ -10,7 +10,7 @@ This is a simple web application developed with Flask, which provides basic CRUD
 [x] Classes CRUD <br>
 [x] Students CRUD <br>
 [x] Dashboard Reporting <br>
-[x] Data backup in cloud location with Rabbitmq <br> <br>
+[x] Data backup in cloud location through Rabbitmq <br> <br>
 
 ## Tools and Technologies
 - Python3.9
@@ -91,9 +91,9 @@ The application will be accessible at [http://localhost:8050](http://localhost:8
 ## Connection information
 - `Local MongoDB`: "mongodb://admin:password@mongodb1:8011/smsystem"
 - `Cloud MongoDB`: "mongodb://admin:password@mongodb1:8012/smsystem"
-- `Local Rabbitmq`: [http://127.0.0.1:15672](http://127.0.0.1:15672)
-- `Cloud Rabbitmq`: [http://127.0.0.1:15673](http://127.0.0.1:15673) 
-  
-Credentials for both is 
+- `Local Rabbitmq`: [http://127.0.0.1:15672](http://127.0.0.1:15672) visit this link on browser
+- `Cloud Rabbitmq`: [http://127.0.0.1:15673](http://127.0.0.1:15673) visit this link on browser
+
+Credentials for both rabbitmq are 
 - username: guest  
 - password: guest
