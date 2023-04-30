@@ -21,6 +21,10 @@
                             <td>{{ class.teacher.name }}</td>
                             <td>
                                 <a href="/class/{{ class._id }}/edit">Edit</a>
+                                <form action="/class/{{ class._id }}/delete" style="display: inline-block" method="POST">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn btn-link">Delete</button>
+                                </form>
                             </td>
                     {% endfor %}
                 </tbody>

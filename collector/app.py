@@ -63,6 +63,14 @@ def callback(ch, method, properties, body):
             # update class name on students table
             db.students.update_many({"class._id": data['data']['_id']}, {
                 "$set": {"class.name": data['data']['name']}})
+        elif (data['action'] == "delete"):
+            db.classes.delete_one({"_id": data['data']})
+            # delete from marks table where class id is the current class id
+            db.marks.delete_many({"class_id": data['data']})
+            # update class name on students table
+            db.students.update_many({"class._id": data['data']}, {
+                "$set": {"class": None}})
+
     elif (data['type'] == "student"):
         if (data['action'] == "create"):
             db.students.insert_one(data['data'])

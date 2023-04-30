@@ -28,3 +28,9 @@ def edit(class_id):
         return Class().edit(class_id)
     else:
         return Class().edit_form(class_id)
+
+
+@class_bp.route('/class/<class_id>/delete', methods=['POST'])
+@auth
+def delete(class_id):
+    return Class().delete(class_id)

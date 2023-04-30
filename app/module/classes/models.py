@@ -120,3 +120,17 @@ class Class:
         teachers = db.users.find({"type": "teacher"})
         subjects = db.subjects.find({})
         return render_template('create_class.html', teachers=teachers, subjects=subjects)
+
+    def delete(self, id):
+        db.classes.delete_one({"_id": id})
+
+        # delete from marks table where class id is the current class id
+        db.marks.delete_many({"class_id": id})
+
+        # update students table where class id is the current class id
+        db.students.update_many({"class._id": id}, {
+                                "$unset": {"class": ""}})
+
+        publish({"type": "class", "action": "delete", "data": id})
+        flash('Class deleted successfully!', 'success')
+        return redirect('/classes')
