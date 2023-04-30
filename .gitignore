@@ -48,3 +48,6 @@ package.nls.*.json
 l10n/
 
 .env
+mongo_data1/
+mongo_data2/
+```

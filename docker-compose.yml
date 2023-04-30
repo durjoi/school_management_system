@@ -11,11 +11,11 @@ services:
       - "8050:5000"
     networks:
       - app
-    # depends_on:
-    # - mongodb1
-    # - mongodb2
-    # - rabbitmq1
-    # - rabbitmq2
+    depends_on:
+      - mongodb1
+      - mongodb2
+      - rabbitmq1
+      - rabbitmq2
   collector:
     build: ./collector
     container_name: smsystem-collector
@@ -23,21 +23,77 @@ services:
       - ./collector:/collector
     ports:
       - "8051:5000"
+    restart: always
     networks:
       - app
-    # depends_on:
-    # - mongodb1
-    # - mongodb2
-    # - rabbitmq1
-    # - rabbitmq2
+    depends_on:
+      - mongodb1
+      - mongodb2
+      - rabbitmq1
+      - rabbitmq2
 
-  # mongodb1:
+  mongodb1:
+    image: mongo:latest
+    container_name: mongodb1
+    command: mongod --port ${MONGODB_PORT:-27017}
+    volumes:
+      - ./mongo_data1:/data/db
+      - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
+      MONGO_USERNAME: ${MONGODB_USER}
+      MONGO_PASSWORD: ${MONGODB_PASSWORD}
+    ports:
+      - ${MONGODB_PORT:-27017}:${MONGODB_PORT:-27017}
+    networks:
+      - app
+    restart: always
 
-  # mongodb2:
+  mongodb2:
+    image: mongo:latest
+    container_name: mongodb2
+    command: mongod --port ${MONGODB_PORT2:-27017}
+    volumes:
+      - ./mongo_data2:/data/db
+      - ./docker-entrypoint-initdb.d/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
+      MONGO_USERNAME: ${MONGODB_USER}
+      MONGO_PASSWORD: ${MONGODB_PASSWORD}
+    ports:
+      - ${MONGODB_PORT2:-27017}:${MONGODB_PORT2:-27017}
+    networks:
+      - app
+    restart: always
 
-  # rabbitmq1:
+  rabbitmq1:
+    image: "rabbitmq:3-management"
+    container_name: rabbitmq1
+    volumes:
+      - ./advanced.config:/etc/rabbitmq/advanced.config
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - app
+    restart: always
+    command: bash -c "rabbitmq-plugins enable --offline rabbitmq_shovel && rabbitmq-plugins enable --offline rabbitmq_shovel_management && rabbitmq-server && rabbitmq-plugins enable rabbitmq_management"
+    depends_on:
+      - rabbitmq2
 
-  # rabbitmq2:
+  rabbitmq2:
+    image: "rabbitmq:3-management"
+    container_name: rabbitmq2
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    networks:
+      - app
+    restart: always
 
 networks:
   app:
