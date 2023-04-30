@@ -120,7 +120,7 @@ function generateReport(classId, subjectId) {
                 }]
                 },
                 options: {
-                responsive: false,
+                responsive: true,
                 title: {
                     display: true,
                     text: `Grade Wise Report - Class: ${data.class_name}, Subject: ${data.subject_name}`
@@ -187,7 +187,7 @@ function generateReport(classId, subjectId) {
                 }]
             },
             options: {
-                responsive: false,
+                responsive: true,
             }
             });
         }
