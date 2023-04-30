@@ -128,8 +128,7 @@ class Class:
         db.marks.delete_many({"class_id": id})
 
         # update students table where class id is the current class id
-        db.students.update_many({"class._id": id}, {
-                                "$unset": {"class": ""}})
+        db.students.update_many({"class._id": id}, {"$set": {"class": None}})
 
         publish({"type": "class", "action": "delete", "data": id})
         flash('Class deleted successfully!', 'success')
