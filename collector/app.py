@@ -51,6 +51,13 @@ def callback(ch, method, properties, body):
     elif (data['type'] == "student"):
         if (data['action'] == "create"):
             db.students.insert_one(data['data'])
+        elif (data['action'] == "update"):
+            student = db.students.find_one({"_id": data['data']['_id']})
+            if (student['class']['_id'] != data['data']['class']['_id']):
+                db.marks.delete_many(
+                    {"student._id": data['data']['_id']})
+            db.students.update_one({"_id": data['data']['_id']}, {
+                                   "$set": data['data']})
     elif (data['type'] == "marks"):
         if (data['action'] == "create"):
             db.marks.insert_one(data['data'])

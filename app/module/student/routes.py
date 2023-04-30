@@ -19,3 +19,12 @@ def create_user():
         return Student().create()
     else:
         return Student().create_form()
+
+
+@student_bp.route('/student/<student_id>/edit', methods=['GET', 'POST'])
+@auth
+def edit_user(student_id):
+    if request.method == 'POST':
+        return Student().edit(student_id)
+    else:
+        return Student().edit_form(student_id)
