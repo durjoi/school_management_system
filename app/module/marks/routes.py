@@ -19,3 +19,10 @@ def create_user(student_id):
         return Marks().create(student_id)
     else:
         return Marks().create_marks_form(student_id)
+
+
+@marks_bp.route('/class_report')
+def get_class_report():
+    class_id = request.args.get('class_id')
+    subject_id = request.args.get('subject_id')
+    return Marks().get_class_report(class_id, subject_id)

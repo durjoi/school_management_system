@@ -92,3 +92,106 @@ class Marks:
 
             return jsonify({"error": "Class not found"}), 400
         return jsonify({"error": "Student not found"}), 400
+
+    def get_class_report(self, class_id, subject_id=None):
+
+        # get all classes
+        classes = db.classes.find({})
+        classes = [item for item in classes]
+
+        if subject_id:
+            # Get the total number of students in the class
+            total_students = db.students.count_documents(
+                {"class._id": class_id})
+
+            # find class with class_id from classes
+            class_ = db.classes.find_one({"_id": class_id})
+            # get all subjects of this class
+            subjects = db.subjects.find({"_id": {"$in": class_['subjects']}})
+            subjects = [item for item in subjects]
+            # Return the report in the desired format
+
+            if (total_students == 0):
+                return "No students in this class"
+
+            # Get the total number of students who passed the subject
+            passed_students = db.marks.count_documents(
+                {'class_id': class_id, 'subject_id': subject_id, 'grade': {'$ne': 'F'}})
+
+            # Get the grade-wise count of students who passed the subject
+            grades = ['A', 'B', 'C', 'D', 'F']
+            grade_counts = {}
+            for grade in grades:
+                grade_counts[grade] = db.marks.count_documents(
+                    {'class_id': class_id, 'subject_id': subject_id, 'grade': grade})
+
+            # Calculate the percentage of students who passed the subject
+            pass_percentage = (passed_students / total_students) * 100
+
+            # Create the report
+            report = []
+            for grade in grades:
+
+                grade_percentage = (grade_counts[grade] / total_students) * 100
+                report.append({
+                    'grade': grade,
+                    'students': grade_counts[grade],
+                    'percentage': grade_percentage
+                })
+
+            response = {
+                "report_type": "subject",
+                'total_students': total_students,
+                'pass_percentage': pass_percentage,
+                'report': report,
+                'subjects': subjects,
+                'classes': classes,
+                'selected_class_id': class_id,
+                'selected_subject_id': subject_id
+            }
+
+            return jsonify(response)
+
+        if not class_id:
+            # select first class
+            class_ = db.classes.find_one({})
+            class_id = class_['_id']
+
+        pipeline = [
+            {"$match": {"class_id": class_id, "marks": {"$ne": "F"}}},
+            {"$group": {"_id": {"class_id": "$class_id", "subject_id": "$subject_id"},
+                        "pass_count": {"$sum": 1}, "total_count": {"$sum": 1}}},
+            {"$lookup": {"from": "subjects", "localField": "_id.subject_id",
+                         "foreignField": "_id", "as": "subject"}},
+            {"$project": {"_id": 0, "subject_name": {"$arrayElemAt": [
+                "$subject.name", 0]}, "pass_count": 1, "total_count": 1}},
+            {"$group": {"_id": "$_id.class_id", "subjects": {"$push": {"subject_name": "$subject_name",
+                                                                       "pass_count": "$pass_count", "total_count": "$total_count"}}, "total_students": {"$sum": "$total_count"}}},
+            {"$unwind": "$subjects"},
+            {"$project": {"_id": 0, "subject_name": "$subjects.subject_name", "pass_count": "$subjects.pass_count", "total_count": "$subjects.total_count",
+                          "pass_percentage": {"$multiply": [{"$divide": ["$subjects.pass_count", "$subjects.total_count"]}, 100]}}},
+            {"$group": {"_id": "$subject_name", "total_count": {"$first": "$total_count"}, "pass_count": {
+                "$sum": "$pass_count"}, "pass_percentage": {"$avg": "$pass_percentage"}}},
+            {"$project": {"_id": 0, "subject_name": "$_id",
+                          "total_count": 1, "pass_count": 1, "pass_percentage": 1}}
+        ]
+        result = list(db.marks.aggregate(pipeline))
+
+        # find class with class_id from classes
+        class_ = db.classes.find_one({"_id": class_id})
+        # get all subjects of this class
+        subjects = db.subjects.find({"_id": {"$in": class_['subjects']}})
+        subjects = [item for item in subjects]
+
+        total_student = db.students.count_documents({"class._id": class_id})
+
+        response = {
+            "report_type": "class",
+            "total_student": total_student,
+            "report": result,
+            'subjects': subjects,
+            'classes': classes,
+            'selected_class_id': class_id,
+        }
+
+        return jsonify(response)
